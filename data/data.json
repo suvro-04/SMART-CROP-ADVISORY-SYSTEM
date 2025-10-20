@@ -1,0 +1,195 @@
+{ 
+  "crop": "Rice",
+  "scientific_name": "Oryza sativa",
+  "category": "Cereal",
+  "state": "Punjab",
+  "varieties": [
+    {
+      "name": "PR-126",
+      "type": "Short-duration (123 days)",
+      "yield_kg_ha": 6300,
+      "special_traits": ["Drought tolerance", "Resistant to blast"],
+      "recommended_zone": "Central Punjab"
+    },
+    {
+      "name": "Pusa-44",
+      "type": "Long-duration (155 days)",
+      "yield_kg_ha": 7000,
+      "special_traits": ["High yield potential", "Heavy water requirement"],
+      "recommended_zone": "South-west Punjab"
+    },
+    {
+      "name": "PR-127",
+      "type": "Medium-duration (140 days)",
+      "yield_kg_ha": 6500,
+      "special_traits": ["Better grain quality", "Moderate pest resistance"],
+      "recommended_zone": "North Punjab"
+    }
+  ],
+
+  "environmental_requirements": {
+    "temperature_c": {
+      "optimal_range": [21, 37],
+      "critical_low": 18,
+      "critical_high": 40
+    },
+    "rainfall_mm_per_season": {
+      "minimum": 1000,
+      "optimal": 1250
+    },
+    "humidity_percent": {
+      "optimal_range": [70, 85]
+    },
+    "sunlight_hours_per_day": {
+      "optimal": 8
+    },
+    "flood_tolerance": "Medium"
+  },
+
+  "soil_and_nutrient_advisory": {
+    "ideal_ph": [5.5, 6.5],
+    "soil_types_suitable": ["Clay loam", "Silty clay", "Loamy"],
+    "macro_nutrients": {
+      "nitrogen_N_kg_ha": {
+        "recommended_range": [100, 120],
+        "deficiency_symptom": "Yellowing of older leaves",
+        "overuse_effect": "Lodging and delayed maturity"
+      },
+      "phosphorus_P2O5_kg_ha": {
+        "recommended_range": [40, 60],
+        "deficiency_symptom": "Purple leaves and poor root growth"
+      },
+      "potassium_K2O_kg_ha": {
+        "recommended_range": [40, 50],
+        "deficiency_symptom": "Leaf edge scorching"
+      }
+    },
+    "organic_matter": {
+      "recommended_FYM_ton_ha": 5,
+      "timing": "Incorporate during field preparation"
+    }
+  },
+
+  "regional_practices": {
+    "punjab": {
+      "sowing_period": "June 10–July 5",
+      "harvesting_period": "October–November",
+      "irrigation_method": "Canal + tube wells (controlled flooding)",
+      "recommended_varieties": ["PR-126", "PR-127", "Pusa-44"],
+      "average_yield_kg_ha": 6100,
+      "best_practices": [
+        "Avoid over-irrigation due to groundwater depletion.",
+        "Adopt SRI or AWD irrigation method.",
+        "Use line transplanting for uniform spacing."
+      ]
+    },
+    "west_bengal": {
+      "sowing_period": "June–July (Kharif)",
+      "recommended_varieties": ["Satabdi", "Jaladhi-1", "Swarna-Sub1"],
+      "average_yield_kg_ha": 5200,
+      "flood_resistant_varieties": ["Swarna-Sub1"]
+    }
+  },
+
+  "yield_optimization": {
+    "factors_affecting_yield": [
+      {
+        "factor": "Nitrogen level",
+        "optimal_range_kg_ha": [100, 120],
+        "impact_on_yield": "High",
+        "yield_drop_if_exceeded_percent": 15,
+        "comment": "Excess nitrogen causes lodging."
+      },
+      {
+        "factor": "Plant spacing",
+        "optimal_spacing_cm": "20x20 (SRI)",
+        "yield_increase_percent": 25
+      },
+      {
+        "factor": "Irrigation frequency",
+        "recommended_method": "Alternate Wetting and Drying (AWD)",
+        "water_saving_percent": 30,
+        "yield_increase_percent": 15
+      },
+      {
+        "factor": "Weed control",
+        "best_method": "Mechanical weeding twice (15 & 30 DAT)",
+        "yield_increase_percent": 10
+      }
+    ],
+    "best_practices": [
+      {
+        "method": "System of Rice Intensification (SRI)",
+        "suitable_conditions": ["Irrigated region", "Loamy soil", "Moderate temp 25–33°C"],
+        "yield_increase_percent": 25,
+        "instructions": "Transplant 8–12 day old seedlings; single plant per hill."
+      },
+      {
+        "method": "Direct Seeding of Rice (DSR)",
+        "suitable_conditions": ["Good irrigation facility", "Fine seedbed"],
+        "yield_increase_percent": 10,
+        "benefit": "Saves 35% water, reduces methane emission."
+      }
+    ]
+  },
+
+  "pest_and_disease_control": {
+    "blast": {
+      "pathogen": "Pyricularia oryzae",
+      "symptoms": "Diamond-shaped lesions on leaves.",
+      "control_measures": [
+        "Use resistant varieties (PR-126)",
+        "Spray tricyclazole 0.06% at booting stage",
+        "Avoid excess nitrogen."
+      ]
+    },
+    "stem_borer": {
+      "insect": "Scirpophaga incertulas",
+      "symptoms": "Dead heart in vegetative stage.",
+      "control_measures": [
+        "Clip seedling tips before transplanting",
+        "Apply cartap hydrochloride 4G @10kg/ha."
+      ]
+    },
+    "brown_plant_hopper": {
+      "symptoms": "Hopper burn patches in fields.",
+      "control_measures": [
+        "Avoid excessive nitrogen fertilizer.",
+        "Spray buprofezin 25 SC @1L/ha."
+      ]
+    }
+  },
+
+  "economic_analysis": {
+    "average_cost_of_cultivation_rs_per_ha": 45000,
+    "average_gross_return_rs_per_ha": 90000,
+    "profit_margin_percent": 50,
+    "cost_breakdown_percent": {
+      "seed": 5,
+      "fertilizer": 20,
+      "labor": 40,
+      "irrigation": 15,
+      "pesticide": 10,
+      "others": 10
+    },
+    "water_saving_in_awd_percent": 30
+  },
+
+  "season": {
+    "type": "Kharif",
+    "duration_days": 120,
+    "start_month": "June",
+    "end_month": "October"
+  },
+
+  "metadata": {
+    "source": [
+      "ICAR India",
+      "Punjab Agricultural University (PAU)",
+      "Kaggle Agriculture Datasets",
+      "Ministry of Agriculture, Govt. of India"
+    ],
+    "version": "1.2",
+    "last_updated": "2025-10-18"
+  }
+}

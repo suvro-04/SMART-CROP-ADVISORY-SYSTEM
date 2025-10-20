@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmAssist - AI Agricultural Advisor</title>
+    <link rel="icon" type="image/jpg" href="img.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="botstyle.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <h1><i class="fa-solid fa-seedling"></i> FarmAssist</h1>
+                </div>
+                <button class="clear-btn" onclick="clearChat()">
+                    <i class="fa-solid fa-trash-can"></i>
+                    Clear
+                </button>
+            </div>
+            <p class="header-subtitle">AI-powered agricultural advisor for modern farming</p>
+            <div class="quick-actions">
+                <button class="quick-btn" onclick="quickQuery('crop seasons')">
+                    <i class="fa-solid fa-calendar-days"></i> Crop Seasons
+                </button>
+                <button class="quick-btn" onclick="quickQuery('pest control')">
+                    <i class="fa-solid fa-bug"></i> Pest Control
+                </button>
+                <button class="quick-btn" onclick="quickQuery('fertilizer guide')">
+                    <i class="fa-solid fa-flask-vial"></i> Fertilizers
+                </button>
+                <button class="quick-btn" onclick="quickQuery('What are the current market prices?')">
+                    <i class="fa-solid fa-coins"></i> Market Prices
+                </button>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message">
+                <h3><i class="fa-solid fa-seedling"></i> Welcome to FarmAssist</h3>
+                <p>Your intelligent farming companion. Ask me anything about crops, fertilizers, pest control, and more!</p>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    class="chat-input" 
+                    id="messageInput" 
+                    placeholder="Ask about crops, farming techniques, pest control, fertilizers..." 
+                    maxlength="500"
+                    onkeypress="handleKeyPress(event)"
+                >
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Send
+                </button>
+            </div>
+            <div class="status-indicator">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Checking connection...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load external JavaScript files -->
+    <script src="../backend/data.js"></script>
+    <script src="../backend/fertilizer.js"></script>
+    <script src="../backend/season.js"></script>
+    <script src="../backend/pest_control.js"></script>
+
+    <script>
+        const API_URL = 'http://localhost:5000/chat';
+        const conversationId = 'user_' + Date.now();
+        let isProcessing = false;
+        let useAI = true; // Toggle between AI and local database
+
+        // Check backend connection on load
+        window.onload = function() {
+            checkBackendConnection();
+            document.getElementById('messageInput').focus();
+        };
+
+        async function checkBackendConnection() {
+            try {
+                const response = await fetch('http://localhost:5000/health', { timeout: 3000 });
+                if (response.ok) {
+                    updateStatus(true, 'AI Assistant Online');
+                    useAI = true;
+                } else {
+                    updateStatus(false, 'Using Local Database');
+                    useAI = false;
+                }
+            } catch (error) {
+                updateStatus(false, 'Using Local Database');
+                useAI = false;
+            }
+        }
+
+        function updateStatus(online, text) {
+            const dot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            
+            if (online) {
+                dot.classList.remove('offline');
+                statusText.textContent = text;
+            } else {
+                dot.classList.add('offline');
+                statusText.textContent = text;
+            }
+        }
+
+        // Handle Enter key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Send message function
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message || isProcessing) return;
+            
+            input.value = '';
+            addMessage(message, 'user');
+            showTypingIndicator();
+            
+            isProcessing = true;
+            updateSendButton(true);
+            
+            try {
+                let response;
+                
+                // Try AI backend first
+                if (useAI) {
+                    try {
+                        const apiResponse = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                message: message,
+                                conversation_id: conversationId
+                            }),
+                            timeout: 30000
+                        });
+                        
+                        const data = await apiResponse.json();
+                        
+                        if (data.success) {
+                            response = data.response;
+                        } else {
+                            throw new Error('AI backend failed');
+                        }
+                    } catch (error) {
+                        console.log('AI unavailable, using local database');
+                        useAI = false;
+                        updateStatus(false, 'Using Local Database');
+                        response = generateLocalResponse(message.toLowerCase());
+                    }
+                } else {
+                    // Use local database
+                    response = generateLocalResponse(message.toLowerCase());
+                }
+                
+                removeTypingIndicator();
+                addMessage(response, 'bot');
+                
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                console.error('Error:', error);
+            } finally {
+                isProcessing = false;
+                updateSendButton(false);
+                input.focus();
+            }
+        }
+
+        // Generate response from local database
+        function generateLocalResponse(msg) {
+            // Check if data.js functions are available
+            if (typeof generateResponse === 'function') {
+                return generateResponse(msg);
+            }
+            
+            // Fallback responses
+            if (msg.includes('pest control')) {
+                const result = pestControl('pest control');
+                return formatPestControlResponse(result);
+            }
+            
+            if (msg.includes('fertilizer')) {
+                const result = fertilizer('fertilizer guide');
+                return formatFertilizerResponse(result);
+            }
+            
+            if (msg.includes('season') || msg.includes('crop seasons')) {
+                const result = seasonInfo('crop seasons');
+                return formatSeasonResponse(result);
+            }
+            
+            return '🤔 I can help you with crops, pest control, fertilizers, and seasonal information. Try asking about specific crops or farming topics!';
+        }
+
+        // Format pest control response
+        function formatPestControlResponse(result) {
+            if (typeof result === 'string') return result;
+            
+            let html = '<div class="crop-info"><h4>🐛 Pest Control Guide</h4>';
+            result.forEach(plant => {
+                html += `<h5>${plant.name}</h5><table><tr><th>Pest</th><th>Pesticides</th><th>Tip</th></tr>`;
+                plant.pests.forEach(p => {
+                    html += `<tr><td>${p.name}</td><td>${p.pesticides.join(', ')}</td><td>${p.tip || '—'}</td></tr>`;
+                });
+                html += '</table>';
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // Format fertilizer response
+        function formatFertilizerResponse(result) {
+            if (typeof result === 'string') return result;
+            
+            let html = '<div class="crop-info"><h4>🌱 Fertilizer Guide</h4>';
+            result.forEach(plant => {
+                html += `<h5>${plant.name}</h5><table><tr><th>Type</th><th>Dose</th><th>Tip</th></tr>`;
+                plant.fertilizers.forEach(f => {
+                    html += `<tr><td>${f.type}</td><td>${f.dose}</td><td>${plant.tip}</td></tr>`;
+                });
+                html += '</table>';
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // Format season response
+        function formatSeasonResponse(result) {
+            if (typeof result === 'string') return result;
+            
+            let html = '<div class="crop-info"><h4>🌦️ Crop Seasons</h4>';
+            result.forEach(s => {
+                html += `<h5>${s.name}</h5>`;
+                html += `<p><strong>Crops:</strong> ${s.crops.join(', ')}</p>`;
+                html += `<p><strong>Fruits:</strong> ${s.fruits.join(', ')}</p>`;
+                html += `<p><em>${s.tip}</em></p>`;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // Quick query function
+        function quickQuery(query) {
+            document.getElementById('messageInput').value = query;
+            sendMessage();
+        }
+
+        // Add message to chat
+        function addMessage(text, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const welcomeMsg = chatMessages.querySelector('.welcome-message');
+            
+            if (welcomeMsg) {
+                welcomeMsg.style.display = 'none';
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const time = new Date().toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    ${text}
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        // Update send button state
+        function updateSendButton(disabled) {
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = disabled;
+            sendBtn.innerHTML = disabled 
+                ? '<i class="fa-solid fa-spinner fa-spin"></i> Sending...'
+                : '<i class="fa-solid fa-paper-plane"></i> Send';
+        }
+
+        // Clear chat function
+        async function clearChat() {
+            if (!confirm('Are you sure you want to clear the chat history?')) return;
+            
+            try {
+                if (useAI) {
+                    await fetch('http://localhost:5000/clear', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ conversation_id: conversationId })
+                    });
+                }
+            } catch (error) {
+                console.error('Error clearing chat:', error);
+            }
+            
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="welcome-message">
+                    <h3><i class="fa-solid fa-seedling"></i> Welcome to FarmAssist</h3>
+                    <p>Your intelligent farming companion. Ask me anything about crops, fertilizers, pest control, and more!</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Schemes for Farmers | FarmSchemes Portal</title>
+    <link rel="icon" type="image/jpg" href="img.jpg">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="scheme.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-tractor"></i>
+                FarmSchemes Portal
+            </h1>
+            <div class="subtitle">Government Schemes & Benefits for Farmers</div>
+            <div class="description">
+                Comprehensive directory of Central and State Government schemes designed to support farmers, boost agricultural productivity, and improve rural livelihoods across India.
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h2>Making Agriculture Prosperous</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalSchemes">50+</div>
+                    <div class="stat-label">Active Schemes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">₹2.8L Cr</div>
+                    <div class="stat-label">Annual Budget</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">60Cr+</div>
+                    <div class="stat-label">Farmers Benefited</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Digital Coverage</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-filter">
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search schemes by name, benefit, or keyword...">
+                <select class="filter-select" id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="income">Income Support</option>
+                    <option value="insurance">Insurance & Risk</option>
+                    <option value="credit">Credit & Loans</option>
+                    <option value="technology">Technology & Innovation</option>
+                    <option value="marketing">Marketing & Trade</option>
+                    <option value="subsidy">Subsidies</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="schemes-grid" id="schemesGrid">
+            <!-- Scheme cards will be populated by JavaScript -->
+        </div>
+
+        <div class="no-results hidden" id="noResults">
+            <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+            <div>No schemes found matching your search criteria.</div>
+            <div style="font-size: 1rem; opacity: 0.8; margin-top: 10px;">Try different keywords or select a different category.</div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Disclaimer:</strong> This portal provides information about government schemes. Please visit official government websites for the most current information and application procedures.</p>
+            <p style="margin-top: 10px; opacity: 0.8;">For technical support or scheme queries, contact your local agriculture department or visit the respective official websites.</p>
+        </div>
+    </div>
+<script src="../backend/scheme.js"></script>
+</body>
+</html>

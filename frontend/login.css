@@ -1,0 +1,201 @@
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      overflow: hidden;
+    }
+
+    /* Floating Background Shapes */
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none; 
+    }
+
+    .shape:nth-child(1) {
+      width: 150px;
+      height: 150px;
+      top: 10%;
+      left: 15%;
+    }
+
+    .shape:nth-child(2) {
+      width: 100px;
+      height: 100px;
+      bottom: 20%;
+      right: 10%;
+      animation-delay: 2s;
+    }
+
+    .shape:nth-child(3) {
+      width: 80px;
+      height: 80px;
+      top: 50%;
+      left: 70%;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    /* Login Container */
+    .login-container {
+      position: relative;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .login-container h2 {
+      margin-bottom: 20px;
+      color: white;
+      font-weight: 600;
+    }
+
+    /* Form Groups */
+    .form-group {
+      position: relative;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: white;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    .form-group:focus-within label {
+      color: #667eea;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    /* Password Toggle */
+    .password-group {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .password-group input {
+      flex: 1;
+      padding-right: 40px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: #333;
+      width: 32px; 
+      text-align: center;
+    }
+
+    /* Buttons */
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s ease, 0.3s ease;
+      margin-bottom: 15px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .login-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(45deg, #5a67d8, #6b46c1);
+    }
+
+    /* Social Buttons */
+    .social-btn {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .social-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .google { background: #4285F4; color: white; }
+    .apple { background: #333; color: white; }
+
+    /* Ripple Effect */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* Extra Links */
+    .extra-links {
+      margin-top: 15px;
+    }
+
+    .extra-links a {
+      color: white;
+      font-size: 12px;
+      text-decoration: none;
+      margin: 0 5px;
+    }
+
+    .extra-links a:hover {
+      text-decoration: underline;
+    }
